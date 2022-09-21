@@ -18,7 +18,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "fl-player": ["./src/third-party/fl-player-es6/fl-player.es.js"]
+    }
   },
   "include": [
     "src"

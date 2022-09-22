@@ -26,6 +26,7 @@ function FirstLightPlayer() {
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const fullscreenDivRef = useRef<HTMLDivElement>(null);
 
+  const [tracks, setTracks] = useState<any>({text: [], audio:[]});
   const [status, setStatus] = useState('');
   const [volume, setVolume] = useState(0.5);
   const [velocity, setVelocity] = useState(1);
@@ -83,7 +84,12 @@ function FirstLightPlayer() {
         document.exitFullscreen();
       }
     }
-  }
+  };
+
+  const handleChangeTrack = (type: string) => (event: any)=>{
+    const track = tracks[type][event.target.value]
+    player.selectTrack(track);
+  };
 
   useEffect(() => {
     if(playerBuilder) {
@@ -108,6 +114,23 @@ function FirstLightPlayer() {
       });
     }
   }, [playerBuilder]);
+
+  useEffect(()=>{
+    if(player){
+      if(status === 'started'){
+        const availableTracks = player.getAllTracks();
+        const groupedTracks = availableTracks.reduce((acc: any, item: any)=>({
+          ...acc,
+          [item.type]: [...acc[item.type], item]
+        }), {
+          audio: [],
+          text: [],
+        })
+        setTracks(groupedTracks);
+        console.log(groupedTracks);
+      }
+    }
+  }, [status, player]);
 
   return (
     <div ref={fullscreenDivRef}>
@@ -142,6 +165,22 @@ function FirstLightPlayer() {
       </p>
       <p>
         Seekbar: <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />
+      </p>
+      <p>
+        Audio:
+        <select onChange={handleChangeTrack('audio')}>
+          {tracks.audio.map((track: any, idx: number)=>(
+            <option key={`audio-opt-${idx}`} value={idx}>{track.language}</option>
+          ))}
+        </select>
+      </p>
+      <p>
+        Subtitles:
+        <select onChange={handleChangeTrack('text')}>
+          {tracks.text.map((track: any, idx: number)=>(
+            <option key={`texts-opt-${idx}`} value={idx}>{track.language}</option>
+          ))}
+        </select>
       </p>
     </div>
   );

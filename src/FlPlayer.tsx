@@ -26,13 +26,35 @@ function FirstLightPlayer() {
   const videoElementRef = useRef(null);
   const [status, setStatus] = useState('');
   const [player, setPlayer] = useState<any>(null);
-  const [time, setTime] = useState(0);
+  // const [time, setTime] = useState(0);
+  const [{currentTime, duration}, setTimeInfo] = useState({
+    currentTime: 0,
+    duration: 0
+  });
+
+  const seek = (time: number)=> {
+    player.seek(time);
+    setTimeInfo({
+      currentTime: time,
+      duration
+    })
+  };
 
   const handlePlay = () => player.play();
 
   const handlePause = () => player.pause();
 
-  const handleSeek = () => player.seek(time);
+  const handleTime = (time: number) => {
+    seek(time);
+  };
+
+  const handleForward = () => {
+    seek(Math.min(duration, currentTime+10));
+  };
+
+  const handleRewind = () => {
+    seek(Math.max(0, currentTime-10));
+  };
 
   useEffect(() => {
     if(playerBuilder) {
@@ -48,6 +70,14 @@ function FirstLightPlayer() {
       setPlayer(playerSetup);
 
       playerSetup.subscribe('playbackstatechanged', (state: string) => setStatus(state));
+
+      playerSetup.subscribe('progressupdate', function () {
+        console.log('progresseupdate', playerSetup);
+        setTimeInfo({
+          currentTime: playerSetup.currentTime,
+          duration: playerSetup.duration,
+        });
+      });
     }
   }, [playerBuilder]);
 
@@ -57,13 +87,16 @@ function FirstLightPlayer() {
         <video ref={videoElementRef} controls width={1060} height={800}></video>
       </p>
       <p>Status: {status}</p>
+      <p>Current time: {currentTime}s</p>
+      <p>Duration: {duration}s</p>
       <p>
         <button onClick={handlePlay}>Play</button>
         <button onClick={handlePause}>Pause</button>
+        <button onClick={handleForward}>Fast Forward (+10 seconds)</button>
+        <button onClick={handleRewind}>Rewind (-10 seconds)</button>
       </p>
       <p>
-        <input type="text" onChange={event => setTime(+event.target.value)}/>
-        <button onClick={handleSeek}>Seek</button>
+        <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />
       </p>
     </div>
   );

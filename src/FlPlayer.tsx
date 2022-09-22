@@ -118,10 +118,10 @@ function FirstLightPlayer() {
         <button onClick={adjustVelocity(2.0)}>2.0</button>
       </p>
       <p>
-        <input value={volume} type="range" min={0} max={100} onChange={event => adjustVolume(+event.target.value)} />
+        Volumen: <input value={volume} type="range" min={0} max={100} onChange={event => adjustVolume(+event.target.value)} />
       </p>
       <p>
-        <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />
+        Seekbar: <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />
       </p>
     </div>
   );

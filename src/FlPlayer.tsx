@@ -22,14 +22,22 @@ const usePlayerBuilder = () => {
 }
 
 function FirstLightPlayer() {
-
   const playerBuilder = usePlayerBuilder();
   const videoElementRef = useRef(null);
+  const [status, setStatus] = useState('');
+  const [player, setPlayer] = useState<any>(null);
+  const [time, setTime] = useState(0);
 
-  useEffect(()=>{
+  const handlePlay = () => player.play();
+
+  const handlePause = () => player.pause();
+
+  const handleSeek = () => player.seek(time);
+
+  useEffect(() => {
     if(playerBuilder) {
 
-      const player = playerBuilder
+      const playerSetup = playerBuilder
         .mediaElement(videoElementRef.current)
         .mediaUrl(contentUrl)
         .drmLicenseUrl(licenseUrl)
@@ -37,7 +45,9 @@ function FirstLightPlayer() {
         .mediaType(flPlayerInterface.MediaType.DASH)
         .build();
 
-      player.play();
+      setPlayer(playerSetup);
+
+      playerSetup.subscribe('playbackstatechanged', (state: string) => setStatus(state));
     }
   }, [playerBuilder]);
 
@@ -45,6 +55,15 @@ function FirstLightPlayer() {
     <div>
       <p>
         <video ref={videoElementRef} controls width={1060} height={800}></video>
+      </p>
+      <p>Status: {status}</p>
+      <p>
+        <button onClick={handlePlay}>Play</button>
+        <button onClick={handlePause}>Pause</button>
+      </p>
+      <p>
+        <input type="text" onChange={event => setTime(+event.target.value)}/>
+        <button onClick={handleSeek}>Seek</button>
       </p>
     </div>
   );

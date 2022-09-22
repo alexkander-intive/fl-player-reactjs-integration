@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState} from 'react';
+import PlayerUI from './components/PlayerUI';
 
 import * as flPlayerInterface from './third-party/fl-player-es6/fl-player-interface.es';
 import { createPlayerBuilder } from './third-party/fl-player-es6/fl-player.es';

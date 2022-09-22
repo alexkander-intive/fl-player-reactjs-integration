@@ -1,4 +1,10 @@
 import React, { useEffect, useRef, useState} from 'react';
+import MusicPlayerSlider from './components/PlayerUI';
+import FastForwardButton from './components/playerUI/fastforwardButton';
+import FullScreenButton from './components/playerUI/fullScreenButton';
+import PlayPauseButton from './components/playerUI/playPauseButton';
+import RewindButton from './components/playerUI/rewindButton';
+import VolumeButton from './components/playerUI/volumeButton';
 
 import * as flPlayerInterface from './third-party/fl-player-es6/fl-player-interface.es';
 import { createPlayerBuilder } from './third-party/fl-player-es6/fl-player.es';
@@ -46,6 +52,11 @@ function FirstLightPlayer() {
       <p>
         <video ref={videoElementRef} controls width={1060} height={800}></video>
       </p>
+      <RewindButton />
+      <PlayPauseButton />
+      <FastForwardButton />
+      <VolumeButton />
+      <FullScreenButton />
     </div>
   );
 }

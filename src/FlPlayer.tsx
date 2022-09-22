@@ -24,9 +24,12 @@ const usePlayerBuilder = () => {
 function FirstLightPlayer() {
   const playerBuilder = usePlayerBuilder();
   const videoElementRef = useRef<HTMLVideoElement>(null);
+  const fullscreenDivRef = useRef<HTMLDivElement>(null);
+
   const [status, setStatus] = useState('');
   const [volume, setVolume] = useState(0.5);
   const [velocity, setVelocity] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [player, setPlayer] = useState<any>(null);
   // const [time, setTime] = useState(0);
   const [{currentTime, duration}, setTimeInfo] = useState({
@@ -70,6 +73,18 @@ function FirstLightPlayer() {
     seek(Math.max(0, currentTime-10));
   };
 
+  const handleFullscreen  = (fullscreen: boolean) => () => {
+    setIsFullscreen(fullscreen);
+    if(fullscreenDivRef.current){
+      if(fullscreen) {
+        fullscreenDivRef.current.requestFullscreen();
+      } else {
+        (window as any).divfs = fullscreenDivRef.current;
+        document.exitFullscreen();
+      }
+    }
+  }
+
   useEffect(() => {
     if(playerBuilder) {
 
@@ -95,7 +110,7 @@ function FirstLightPlayer() {
   }, [playerBuilder]);
 
   return (
-    <div>
+    <div ref={fullscreenDivRef}>
       <p>
         <video ref={videoElementRef} controls width={1060} height={800}></video>
       </p>
@@ -116,6 +131,11 @@ function FirstLightPlayer() {
         <button onClick={adjustVelocity(1.25)}>1.25</button>
         <button onClick={adjustVelocity(1.5)}>1.5</button>
         <button onClick={adjustVelocity(2.0)}>2.0</button>
+      </p>
+      <p>
+        <button onClick={handleFullscreen(!isFullscreen)}>
+          {isFullscreen? 'Desactivate fullscreen' : 'Activate fullscreen'}
+        </button>
       </p>
       <p>
         Volumen: <input value={volume} type="range" min={0} max={100} onChange={event => adjustVolume(+event.target.value)} />

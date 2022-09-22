@@ -5,11 +5,13 @@ import Slider from '@mui/material/Slider';
 import VolumeUpRounded from '@mui/icons-material/VolumeUpRounded';
 import VolumeDownRounded from '@mui/icons-material/VolumeDownRounded';
 
-export default function VolumeButton() {
+export default function VolumeButton({ onChange }: { onChange: (value: number) => void }) {
   const [value, setValue] = React.useState<number>(30);
   const theme = useTheme();
   const handleChange = (event: Event, newValue: number | number[]) => {
+      console.log(newValue);
     setValue(newValue as number);
+    onChange(newValue as number);
   };
   const lightIconColor =
     theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
@@ -37,6 +39,7 @@ export default function VolumeButton() {
                 },
               },
             }}
+            onChange={handleChange}
           />
         <VolumeUpRounded htmlColor={lightIconColor} />
     </Stack>

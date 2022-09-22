@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState} from 'react';
-import PlayerUI from './components/PlayerUI';
 
 import * as flPlayerInterface from './third-party/fl-player-es6/fl-player-interface.es';
 import { createPlayerBuilder } from './third-party/fl-player-es6/fl-player.es';
+import SeekBarButton from "./components/playerUI/seekbarButton";
+import Box from "@mui/material/Box";
+import RewindButton from "./components/playerUI/rewindButton";
+import PlayPauseButton from "./components/playerUI/playPauseButton";
+import FastForwardButton from "./components/playerUI/fastforwardButton";
+import VolumeButton from "./components/playerUI/volumeButton";
+import FullScreenButton from "./components/playerUI/fullScreenButton";
 
 type FlPlayerBuilderType = ReturnType<typeof createPlayerBuilder>;
 
-const contentUrl = 'https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd';
+const contentUrl = 'https://storage.googleapis.com/shaka-demo-assets/bbb-dark-truths/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
 const usePlayerBuilder = () => {
@@ -138,15 +144,23 @@ function FirstLightPlayer() {
       <p>
         <video ref={videoElementRef} controls width={1060} height={800}></video>
       </p>
+      <Box sx={{ width: 'auto', overflow: 'hidden', height: 'auto',
+        margin: '3%', padding: '3%', zIndex: '-1',
+        background: 'linear-gradient(90deg, rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%)' }}>
+        <SeekBarButton duration={duration} currentTime={currentTime} onChange={handleTime} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly'}}>
+          <RewindButton onClick={handleRewind} />
+          <PlayPauseButton play={handlePlay} pause={handlePause} />
+          <FastForwardButton onClick={handleForward} />
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+          <Box sx={{ width: '200px' }}>
+            <VolumeButton onChange={adjustVolume} />
+          </Box>
+          <FullScreenButton onClick={handleFullscreen(!isFullscreen)} />
+        </Box>
+      </Box>
       <p>Status: {status}</p>
-      <p>Current time: {currentTime}s</p>
-      <p>Duration: {duration}s</p>
-      <p>
-        <button onClick={handlePlay}>Play</button>
-        <button onClick={handlePause}>Pause</button>
-        <button onClick={handleForward}>Fast Forward (+10 seconds)</button>
-        <button onClick={handleRewind}>Rewind (-10 seconds)</button>
-      </p>
       <p>
         Velocity:
         <button onClick={adjustVelocity(0.25)}>0.25</button>
@@ -155,17 +169,6 @@ function FirstLightPlayer() {
         <button onClick={adjustVelocity(1.25)}>1.25</button>
         <button onClick={adjustVelocity(1.5)}>1.5</button>
         <button onClick={adjustVelocity(2.0)}>2.0</button>
-      </p>
-      <p>
-        <button onClick={handleFullscreen(!isFullscreen)}>
-          {isFullscreen? 'Desactivate fullscreen' : 'Activate fullscreen'}
-        </button>
-      </p>
-      <p>
-        Volumen: <input value={volume} type="range" min={0} max={100} onChange={event => adjustVolume(+event.target.value)} />
-      </p>
-      <p>
-        Seekbar: <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />
       </p>
       <p>
         Audio:

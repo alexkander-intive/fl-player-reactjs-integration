@@ -12,14 +12,12 @@ const TinyText = styled(Typography)({
     letterSpacing: 0.2,
 });
 
-export default function SeekBarButton() {
-    const [position, setPosition] = React.useState(32);
-    const duration = 200; // seconds
+export default function SeekBarButton({ onChange, duration, currentTime }: { onChange: (value: number) => void; duration: number; currentTime: number; }) {
     const theme = useTheme();
     function formatDuration(value: number) {
         const minute = Math.floor(value / 60);
         const secondLeft = value - minute * 60;
-        return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+        return `${minute}:${secondLeft < 10 ? `0${secondLeft.toFixed(2)}` : secondLeft.toFixed(2)}`;
     }
 
     return(
@@ -27,11 +25,11 @@ export default function SeekBarButton() {
             <Slider
             aria-label="time-indicator"
             size="small"
-            value={position}
+            value={currentTime}
             min={0}
             step={1}
             max={duration}
-            onChange={(_, value) => setPosition(value as number)}
+            onChange={(_, value) => onChange(+value)}
             sx={{
                 color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
                 height: 4,
@@ -67,8 +65,8 @@ export default function SeekBarButton() {
                 mt: -2,
             }}
             >
-            <TinyText>{formatDuration(position)}</TinyText>
-            <TinyText>-{formatDuration(duration - position)}</TinyText>
+            <TinyText>{formatDuration(currentTime)}</TinyText>
+            <TinyText>-{formatDuration(duration - currentTime)}</TinyText>
             </Box>
 
         </div>

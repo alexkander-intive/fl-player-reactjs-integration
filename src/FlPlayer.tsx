@@ -23,8 +23,10 @@ const usePlayerBuilder = () => {
 
 function FirstLightPlayer() {
   const playerBuilder = usePlayerBuilder();
-  const videoElementRef = useRef(null);
+  const videoElementRef = useRef<HTMLVideoElement>(null);
   const [status, setStatus] = useState('');
+  const [volume, setVolume] = useState(0.5);
+  const [velocity, setVelocity] = useState(1);
   const [player, setPlayer] = useState<any>(null);
   // const [time, setTime] = useState(0);
   const [{currentTime, duration}, setTimeInfo] = useState({
@@ -38,6 +40,18 @@ function FirstLightPlayer() {
       currentTime: time,
       duration
     })
+  };
+
+  const adjustVolume = (volumePercent: number)=>{
+    setVolume(volumePercent);
+    if(videoElementRef.current){
+      videoElementRef.current.volume = volumePercent / 100;
+    }
+  };
+
+  const adjustVelocity = (newVelocity: number) => () =>{
+    setVelocity(newVelocity);
+    player.playbackRate = newVelocity;
   };
 
   const handlePlay = () => player.play();
@@ -72,7 +86,6 @@ function FirstLightPlayer() {
       playerSetup.subscribe('playbackstatechanged', (state: string) => setStatus(state));
 
       playerSetup.subscribe('progressupdate', function () {
-        console.log('progresseupdate', playerSetup);
         setTimeInfo({
           currentTime: playerSetup.currentTime,
           duration: playerSetup.duration,
@@ -94,6 +107,18 @@ function FirstLightPlayer() {
         <button onClick={handlePause}>Pause</button>
         <button onClick={handleForward}>Fast Forward (+10 seconds)</button>
         <button onClick={handleRewind}>Rewind (-10 seconds)</button>
+      </p>
+      <p>
+        Velocity:
+        <button onClick={adjustVelocity(0.25)}>0.25</button>
+        <button onClick={adjustVelocity(0.5)}>0.5</button>
+        <button onClick={adjustVelocity(1)}>1</button>
+        <button onClick={adjustVelocity(1.25)}>1.25</button>
+        <button onClick={adjustVelocity(1.5)}>1.5</button>
+        <button onClick={adjustVelocity(2.0)}>2.0</button>
+      </p>
+      <p>
+        <input value={volume} type="range" min={0} max={100} onChange={event => adjustVolume(+event.target.value)} />
       </p>
       <p>
         <input value={currentTime} type="range" min={0} max={duration} onChange={event => handleTime(+event.target.value)} style={{width: '100%'}} />

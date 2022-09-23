@@ -103,25 +103,30 @@ function FirstLightPlayer() {
   useEffect(() => {
     if(playerBuilder) {
 
-      const asset = getAsset();
-      console.log({ asset })
+      getAsset().then((asset)=>{
 
-      const playerSetup = playerBuilder
-        .mediaElement(videoElementRef.current)
-        .mediaUrl(contentUrl)
-        .drmLicenseUrl(licenseUrl)
-        .drmScheme(flPlayerInterface.DrmScheme.WIDEVINE)
-        .mediaType(flPlayerInterface.MediaType.DASH)
-        .build();
-
-      setPlayer(playerSetup);
-
-      playerSetup.subscribe('playbackstatechanged', (state: string) => setStatus(state));
-
-      playerSetup.subscribe('progressupdate', function () {
-        setTimeInfo({
-          currentTime: playerSetup.currentTime,
-          duration: playerSetup.duration,
+        console.log({ asset });
+  
+        const playerSetup = playerBuilder
+          .mediaElement(videoElementRef.current)
+          // .mediaUrl(contentUrl)
+          // .drmLicenseUrl(licenseUrl)
+          // .drmScheme(flPlayerInterface.DrmScheme.WIDEVINE)
+          .mediaUrl(asset.contentUrl)
+          .drmLicenseUrl(asset.licenseUrl)
+          .drmScheme(asset.drmScheme)
+          .mediaType(flPlayerInterface.MediaType.DASH)
+          .build();
+  
+        setPlayer(playerSetup);
+  
+        playerSetup.subscribe('playbackstatechanged', (state: string) => setStatus(state));
+  
+        playerSetup.subscribe('progressupdate', function () {
+          setTimeInfo({
+            currentTime: playerSetup.currentTime,
+            duration: playerSetup.duration,
+          });
         });
       });
     }

@@ -81,10 +81,11 @@ export const getAsset = ()=>{
 
   const asset = contentAuthorizer.authorizePlayback({
     mediaID: contentId,
-    consumptionType: flContentAuthorization.ConsumptionType.VOD,
-    catalogType: 'movie',
+    consumptionType: flContentAuthorization.ConsumptionType.LIVE,
+    catalogType: 'channel',
     mediaType: flPlayerInterface.MediaType.DASH,
     drmScheme: flPlayerInterface.DrmScheme.WIDEVINE,
+    playbackMode: flContentAuthorization.PlaybackMode.LIVE,
   });
 
   return asset;

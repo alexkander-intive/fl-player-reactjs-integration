@@ -12,6 +12,7 @@ import FullScreenButton from "./components/playerUI/fullScreenButton";
 
 type FlPlayerBuilderType = ReturnType<typeof createPlayerBuilder>;
 
+// const contentUrl = 'https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd';
 const contentUrl = 'https://storage.googleapis.com/shaka-demo-assets/bbb-dark-truths/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
@@ -186,6 +187,11 @@ function FirstLightPlayer() {
           ))}
         </select>
       </p>
+      <video width="400" controls>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg" />
+        Your browser does not support HTML video.
+      </video>
     </div>
   );
 }

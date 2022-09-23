@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-setEnvironment('msgTveStaging');
+setEnvironment('msgDtcStaging');
 
 root.render(
   <React.StrictMode>

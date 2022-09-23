@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { setEnvironment } from './platformConfiguration';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+setEnvironment('msgTveStaging');
+
 root.render(
   <React.StrictMode>
     <App />

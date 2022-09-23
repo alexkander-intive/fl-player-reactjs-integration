@@ -9,6 +9,7 @@ import PlayPauseButton from "./components/playerUI/playPauseButton";
 import FastForwardButton from "./components/playerUI/fastforwardButton";
 import VolumeButton from "./components/playerUI/volumeButton";
 import FullScreenButton from "./components/playerUI/fullScreenButton";
+import { getAsset } from './utils';
 
 type FlPlayerBuilderType = ReturnType<typeof createPlayerBuilder>;
 
@@ -101,6 +102,9 @@ function FirstLightPlayer() {
 
   useEffect(() => {
     if(playerBuilder) {
+
+      const asset = getAsset();
+      console.log({ asset })
 
       const playerSetup = playerBuilder
         .mediaElement(videoElementRef.current)

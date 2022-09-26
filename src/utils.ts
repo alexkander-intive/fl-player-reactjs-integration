@@ -17,7 +17,7 @@ type PlatformClient = {
 }
 
 const platformClientDataKeyStorage = 'client-name';
-const contentId = 'CDC4A7D8-8CEE-4147-9F88-273F9FEB90A3';
+const contentId = '306C8BAB-A230-4E60-A8D5-DA588056027F';
 
 const savePlatformClient = (client: PlatformClient) => {
   localStorage.setItem(platformClientDataKeyStorage, JSON.stringify(client))
@@ -73,9 +73,9 @@ export const getAsset = ()=>{
       );
       savePlatformClient(platformClient);
     } else {
-      platformClient = flPlatformAuthorizer.createPlatformClient("firstlight-msg-staging-deviceId-001", "aleDevice");
+      platformClient = flPlatformAuthorizer.createPlatformClient("firstlight-msg-staging-deviceId-001", "web");
     }
-    
+
     const contentAuthconfiguration = {
     endPointUrl: platformConfig.CONTENT_AUTH_ENDPOINT,
     clientRegistrationEndPointUrl: platformConfig.CLIENT_REGISTERATION_ENDPOINT,
@@ -85,6 +85,8 @@ export const getAsset = ()=>{
                                                       contentAuthconfiguration,
                                                       platformAuthorizer,
                                                       platformClient);
+
+                                                      console.log(contentAuthorizer)
                                                       
   const asset = contentAuthorizer.authorizePlayback({
     mediaID: contentId,
